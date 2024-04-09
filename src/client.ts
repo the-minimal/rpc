@@ -18,7 +18,7 @@ const getSearch = (input: Nullable<Record<string, any> | any[]>) => {
 	}
 };
 
-export const createClient = <
+export const createHttpClient = <
 	$Namespaces extends Namespaces,
 	$Queries = InferQueries<$Namespaces>,
 	$Mutations = InferMutations<$Namespaces>,

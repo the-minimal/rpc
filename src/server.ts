@@ -1,4 +1,5 @@
-import { Namespaces, Nullable, Procedure } from "./types";
+import { Namespaces, Nullable, Procedure, Protocol } from "./types";
+import { protocolJson } from "./utils";
 
 const searchToProxy = (search: string) => {
 	return new Proxy(new URLSearchParams(search), {
@@ -17,34 +18,46 @@ export const procedure = <
 	$Handler extends Procedure<$Input, any>
 >(
 	input: $Input,
-	handler: $Handler
-) => {
-	return (data: Data<$Input>, req: Request): ReturnType<$Handler> => {
-		return handler(input ? input(data): null, req) as any;
-	};
-};
+	handler: $Handler,
+	props: {
+		ttl?: Nullable<string | number>,
+		protocol?: Protocol
+	}
+) => ({
+	input,
+	handler,
+	props: {
+		ttl: props.ttl ?? 0,
+		protocol: props.protocol ?? protocolJson 
+	}
+});
 
 export const execute = async (routes: Namespaces, req: Request) => {
 	const url = new URL(req.url);
 	const query = req.method.charCodeAt(0) === 67;
 	const paths = url.pathname.slice(1).split("/");
-	const namespace = paths[0];
-	const procedure = paths[1];
+	const namespaceName = paths[0];
+	const procedureName = paths[1];
 
-	const key = `${query ? "query": "mutate"}/${procedure}`;
+	const key = `${query ? "query": "mutate"}/${procedureName}`;
 
-	if (!namespace) {
+	if (!namespaceName) {
 		throw Error("Namespace not provided");
-	} else if (!(namespace in routes)) {
-		throw Error(`Namespace [${namespace}] does not exist`);
-	} else if (!procedure) {
+	} else if (!(namespaceName in routes)) {
+		throw Error(`Namespace [${namespaceName}] does not exist`);
+	} else if (!procedureName) {
 		throw Error("Procedure not provided");
-	} else if (!(key in routes[namespace])) {
-		throw Error(`Procedure [${procedure}] does not exist`);
+	} else if (!(key in routes[namespaceName])) {
+		throw Error(`Procedure [${procedureName}] does not exist`);
 	}
 
-	return (await routes[namespace][key](
-		query ? searchToProxy(url.search): (await req.json()),
-		req
+	const procedure = routes[namespaceName][key];
+	const protocol = procedure.props.protocol;
+	const input = procedure.input(query 
+		? searchToProxy(url.search)
+		: (protocol.decode(await protocol.data(req))
 	));
+	const output = await procedure.handler(input, req);
+
+	return output;
 };

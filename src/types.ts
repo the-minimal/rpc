@@ -7,7 +7,15 @@ export type Procedures = Record<string, Procedure>;
 export type Procedure<
 	$Input = any, 
 	$Output = any 
-> = (data: $Input, req: Request) => Promise<$Output>;
+> = {
+	input: (data: unknown) => $Input;
+	handler: (data: $Input, req: Request) => Promise<$Output>;
+	// TODO: what if ttl is dynamic?
+	props: {
+		ttl: string | number;
+		protocol: Protocol 
+	}
+};
 
 export type FilterQuery<$ProcedureKey extends string> = $ProcedureKey extends `query/${infer $Rest}`
 	? $Rest
@@ -39,4 +47,14 @@ export type InferMutation<
 
 export type InferMutations<$Namespaces extends Namespaces> = {
 	[$NamespaceKey in keyof $Namespaces]: InferMutation<$Namespaces, $NamespaceKey>;
+};
+
+export type Protocol<
+	$Decoded = any,
+	$Encoded = any
+> = {
+	type: string,
+	data: (req: Request) => Promise<$Encoded>,
+	encode: (value: $Decoded) => $Encoded,
+	decode: (value: $Encoded) => $Decoded
 };

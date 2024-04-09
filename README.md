@@ -1,18 +1,58 @@
-TypeScript RPC library with focus on bundle size, runtime performance, type performance and startup performance.
+Minimal RPC in TypeScript.
+
+# Install
+
+```bash
+yarn add @the-minimal/rpc
+```
+
+---
+
+# Features
+
+- Agnostic
+    - Runtime
+    - Framework
+- Simple
+    - 3 server functions
+    - 1 client function
+- Small
+    - x kB server bundle
+    - x kB client bundle
+- Fast
+    - Parsing
+    - Initialization
+    - Runtime execution
+    - Type checking
+- 2 levels of nesting
+    - Namespace
+    - Procedure
+- 2 types of procedures
+    - Query for cacheable requests
+    - Mutation for anything else
+- No automatic batching
+- No middleware chaining
+- No code generation
+- No dependencies
+
+---
 
 # API
 
 ## Server
 
-### Routes
+### Define
 
 ```ts
+import { query, mutation } from "@the-minimal/rpc/server";
+
 const article = {
-    "query/by-category": procedure(
+    "by-category": query(
         object({ category: string(), page: number() }),
-        async ({ category, page }) => { /* .. */ }
+        async ({ category, page }) => { /* .. */ },
+        { ttl: 3600 }
     ),
-    "mutate/create-default": procedure(
+    "create-default": mutation(
         object({
             title: string(),
             category: string(),
@@ -29,13 +69,26 @@ const routes = {
 export type Routes = typeof routes;
 ```
 
-### Execution
+### Execute
 
 ```ts
+import { execute } from "@the-minimal/rpc/server";
+
 // Cloudflare Workers
 export default {
     async fetch(req: Request, res: Response) {
-        return execute(routes, req, res);
+        try {
+            const { data, ttl = 0 } = execute(routes, req);
+            const response = Response.json(data);
+
+            if (ttl) {
+                response.headers.set("cache-control", `max-age${ttl ? `=${ttl}`: ""}`);
+            }
+
+            return response;
+        } catch (e) {
+            return new Response(500, e?.message || "Something went wrong");
+        }
     }
 }
 ```
@@ -43,10 +96,12 @@ export default {
 ## Client
 
 ```ts
+import { createHttpClient } from "@the-minimal/rpc/client";
 import type { Routes } from "server";
 
-const { query, mutate } = createClient(process.env.API_URL);
+const { query, mutate } = createHttpClient(process.env.API_URL);
+const { signal } = new AbortController();
 
-query("article/by-category", { category: "tech", page: 1 });
-mutate("article/create-default", { title: "Hello", category: "tech", content: ".." });
+query("article/by-category", { category: "tech", page: 1 }, { signal });
+mutate("article/create-default", { title: "Hello", category: "tech", content: ".." }, { signal });
 ```
