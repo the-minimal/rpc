@@ -34,6 +34,9 @@ export const createHttpClient = <
 			return fetch(`${base}/${key}`, {
 				signal,
 				method: "POST",
+				headers: {
+					"content-type": "application/json"
+				},
 				body: JSON.stringify(input)
 			}) as Promise<InferOutput<$Procedure>>;
 		},

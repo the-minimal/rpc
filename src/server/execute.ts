@@ -4,7 +4,7 @@ import { searchToProxy } from "./utils";
 
 export const execute = async (routes: Namespaces, req: Request) => {
 	const url = new URL(req.url);
-	const query = req.method.charCodeAt(0) === 47;
+	const query = req.method.charCodeAt(0) === 71;
 	const paths = url.pathname.slice(1).split("/");
 	const namespaceName = paths[0];
 	const procedureName = paths[1];
