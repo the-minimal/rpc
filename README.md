@@ -10,30 +10,30 @@ yarn add @the-minimal/rpc
 
 # Features
 
-- Agnostic
+- **Agnostic**
     - Runtime
     - Framework
-- Simple
-    - 3 server functions
+- **Simple**
+    - 4 server functions
     - 1 client function
-- Small
-    - x kB server bundle
-    - x kB client bundle
-- Fast
+- **Small**
+    - 500 bytes server bundle
+    - 250 bytes client bundle
+- **Fast**
     - Parsing
     - Initialization
     - Runtime execution
     - Type checking
-- 2 levels of nesting
+- **2 levels of nesting**
     - Namespace
     - Procedure
-- 2 types of procedures
+- **2 types of procedures**
     - Query for cacheable requests
-    - Mutation for anything else
-- No automatic batching
-- No middleware chaining
-- No code generation
-- No dependencies
+    - Mutation for everything else
+- **No automatic batching**
+- **No middleware chaining**
+- **No code generation**
+- **No dependencies**
 
 ---
 
@@ -50,7 +50,6 @@ const article = {
     "by-category": query(
         object({ category: string(), page: number() }),
         async ({ category, page }) => { /* .. */ },
-        { ttl: 3600 }
     ),
     "create-default": mutation(
         object({
@@ -78,16 +77,23 @@ import { execute } from "@the-minimal/rpc/server";
 export default {
     async fetch(req: Request, res: Response) {
         try {
-            const { data, ttl = 0 } = execute(routes, req);
+            const { data, headers } = execute(routes, req);
             const response = Response.json(data);
 
-            if (ttl) {
-                response.headers.set("cache-control", `max-age${ttl ? `=${ttl}`: ""}`);
+            if (headers) {
+                const keys = Object.keys(headers);
+
+                for (let i = 0; i < keys.length; ++i) {
+                    response.headers.set(keys[i], headers[keys[i]]);
+                }
             }
 
             return response;
         } catch (e) {
-            return new Response(500, e?.message || "Something went wrong");
+            return new Response(
+                e?.code ?? 500, 
+                e?.message ?? "Something went wrong"
+            );
         }
     }
 }
@@ -102,6 +108,6 @@ import type { Routes } from "server";
 const { query, mutate } = createHttpClient(process.env.API_URL);
 const { signal } = new AbortController();
 
-query("article/by-category", { category: "tech", page: 1 }, { signal });
-mutate("article/create-default", { title: "Hello", category: "tech", content: ".." }, { signal });
+query("article/by-category", { category: "tech", page: 1 }, signal);
+mutate("article/create-default", { title: "Hello", category: "tech", content: ".." }, signal);
 ```
