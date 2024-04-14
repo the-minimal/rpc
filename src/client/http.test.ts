@@ -1,6 +1,7 @@
 import { it, expect, spyOn } from "bun:test";
 import { mutation, query } from "../server";
-import { createHttpClient } from "./createHttpClient";
+import { http } from "./http";
+import { Procedures, Records } from "../types";
 
 const headers = {
 	hello: "world"
@@ -17,22 +18,22 @@ const routes = {
 		one: query(userInput, async (data) => ({ data: { age: data.age, name: data.name }, headers })),
 		two: mutation(userInput, async (data) => ({ data: { age: data.age, name: data.name }, headers })),
 	}
-};
+} satisfies Records<Procedures>;
 
-const client = createHttpClient<typeof routes>("http://localhost");
-const querySpy = spyOn(client, "query");
-const mutateSpy = spyOn(client, "mutate");
+const test = http<typeof routes.test>("http://localhost/test");
+const querySpy = spyOn(test, "query");
+const mutateSpy = spyOn(test, "mutate");
 
 it("should call query procedure", () => {
-	(querySpy as any)("test/one", data);
+	(querySpy as any)("one", data);
 
 	expect(querySpy).toHaveBeenCalledTimes(1);
-	expect(querySpy).toHaveBeenCalledWith("test/one", data);
+	expect(querySpy).toHaveBeenCalledWith("one", data);
 });
 
 it("should call mutate procedure", () => {
-	(mutateSpy as any)("test/two", data);
+	(mutateSpy as any)("two", data);
 
 	expect(mutateSpy).toHaveBeenCalledTimes(1);
-	expect(mutateSpy).toHaveBeenCalledWith("test/two", data);
+	expect(mutateSpy).toHaveBeenCalledWith("two", data);
 });

@@ -1,7 +1,7 @@
-import { Handler, Input, Json, Maybe, Nullable, Procedure } from "../types";
+import { Handler, Input, Json, Maybe, Nullable, Procedure, Records } from "../types";
 
 export const mutation = <
-	$Input extends Nullable<Json> = null,
+	$Input extends Nullable<Records> = null,
 	$Output extends Maybe<Json> = void,
 >(
 	input: Nullable<Input<$Input>>,

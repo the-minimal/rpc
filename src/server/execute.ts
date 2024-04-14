@@ -1,25 +1,22 @@
-import { Namespaces } from "../types";
+import { Procedures } from "../types";
 import { error } from "./error";
 import { searchToProxy } from "./utils";
 
-export const execute = async (routes: Namespaces, req: Request) => {
-	const url = new URL(req.url);
+export const execute = async (
+	procedures: Procedures, 
+	procedureName: string, 
+	url: URL,
+	req: Request
+) => {
 	const query = req.method.charCodeAt(0) === 71;
-	const paths = url.pathname.slice(1).split("/");
-	const namespaceName = paths[0];
-	const procedureName = paths[1];
 
-	if (!namespaceName) {
-		error(404, "Namespace not provided");
-	} else if (!(namespaceName in routes)) {
-		error(404, `Namespace [${namespaceName}] does not exist`);
-	} else if (!procedureName) {
+	if (!procedureName) {
 		error(404, "Procedure not provided");
-	} else if (!(procedureName in routes[namespaceName])) {
+	} else if (!(procedureName in procedures)) {
 		error(404, `Procedure [${procedureName}] does not exist`);
 	}
 
-	const procedure = routes[namespaceName][procedureName];
+	const procedure = procedures[procedureName];
 
 	if (procedure.input) {
 		const data = query

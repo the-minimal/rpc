@@ -4,8 +4,6 @@ export type Maybe<$Type> = $Type | void;
 
 export type Records<$Value = any> = Record<string | number | symbol, $Value>;
 
-export type Namespaces = Records<Procedures>;
-
 export type Procedures = Records<Procedure>;
 
 export type Json = Array<any> | Records;
