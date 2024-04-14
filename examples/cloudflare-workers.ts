@@ -11,7 +11,7 @@ const rpc = {
 } satisfies Records<Procedures>;
 
 export type RpcArticle = typeof rpc.article;
-export type RpcUser= typeof rpc.user;
+export type RpcUser = typeof rpc.user;
 
 // index.ts
 export default {

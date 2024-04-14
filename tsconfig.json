@@ -1,12 +1,12 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["ESNext", "WebWorker"],
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
+  "compileroptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "webworker"],
+    "moduleresolution": "node",
+    "forceconsistentcasinginfilenames": true,
+    "esmoduleinterop": true,
+    "isolatedmodules": true,
     "strict": true
   },
   "include": ["src"],
