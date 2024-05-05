@@ -6,7 +6,12 @@ import { userRegisterContract } from "./contract";
 const userRegisterProcedure = protocolProcedure(
 	userRegisterContract,
 	async (value) => {
+		if(value.email) {
+			throw Error("Missing or invalid token");
+		}
+
 		console.log({ value });
+
 		return {
 			id: "test",
 		};
