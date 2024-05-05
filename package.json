@@ -1,15 +1,69 @@
 {
   "name": "@the-minimal/rpc",
-  "sideEffects": false,
   "type": "module",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "Miroslav Vršecký <yamiteru@icloud.com>",
+  "description": "Minimal RPC library in TypeScript",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "build/*.js",
+    "build/*.map",
+    "build/*.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-minimal/validator.git",
+    "directory": "src"
+  },
+  "keywords": [
+    "trpc",
+    "rpc",
+    "typescript-rpc",
+    "javascript-rpc",
+    "javascript",
+    "typescript"
+  ],
+  "homepage": "https://github.com/the-minimal/validator",
+  "bugs": {
+    "url": "https://github.com/the-minimal/validator/issues"
+  },
   "scripts": {
-    "build": "bun run build.ts",
-    "test": "bun test --coverage"
+    "prepublishOnly": "bun run test && bun run build",
+    "release": "release-it",
+    "build": "bun run build:tsup && bun run build:stats",
+    "build:tsup": "tsup",
+    "build:stats": "bun run scripts/stats.ts",
+    "test": "bun test --coverage",
+    "check": "bunx @biomejs/biome check --apply ./",
+    "test:server": "bun test/server.ts",
+    "test:client": "bun test/client.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@biomejs/biome": "1.6.4",
+    "@types/bun": "latest",
+    "release-it": "17.2.0",
+    "tsup": "8.0.2"
   },
   "peerDependencies": {
     "typescript": "5.4.5"
+  },
+  "dependencies": {
+    "@the-minimal/protocol": "0.1.0",
+    "@the-minimal/types": "0.4.0",
+    "@the-minimal/validator": "0.3.0"
   }
 }

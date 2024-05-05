@@ -3,12 +3,13 @@
     "target": "esnext",
     "module": "esnext",
     "lib": ["esnext", "webworker"],
-    "moduleresolution": "node",
+    "moduleresolution": "nodenext",
+    "skipLibCheck": true,
     "forceconsistentcasinginfilenames": true,
     "esmoduleinterop": true,
     "isolatedmodules": true,
     "strict": true
   },
-  "include": ["src"],
+  "include": ["src", "test"],
   "exclude": ["node_modules"]
 }

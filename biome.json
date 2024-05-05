@@ -1,0 +1,29 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
+	"files": {
+		"include": ["src", "test"],
+		"ignore": ["node_modules"]
+	},
+	"linter": {
+		"include": ["src", "test"],
+		"ignore": ["node_modules"],
+		"rules": {
+			"suspicious": {
+				"useValidTypeof": "off",
+				"noExplicitAny": "off"
+			},
+			"style": {
+				"noParameterAssign": "off",
+				"useEnumInitializers": "off"
+			}
+		}
+	},
+	"formatter": {
+		"include": ["src", "test"],
+		"ignore": ["node_modules"]
+	},
+	"organizeImports": {
+		"include": ["src", "test"],
+		"ignore": ["node_modules"]
+	}
+}

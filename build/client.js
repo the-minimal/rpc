@@ -1,1 +1,0 @@
-var P=(o)=>{if(o){const f=new URLSearchParams(o);return f.sort(),f.toString()}else return""};var d=(o)=>{return{query:(f,I,O)=>{return fetch(`${o}/${f}${P(I)}`,{signal:O,method:"GET"})},mutate:(f,I,O)=>{return fetch(`${o}/${f}`,{signal:O,method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(I)})}}};export{d as createHttpClient};
