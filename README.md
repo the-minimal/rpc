@@ -16,32 +16,32 @@ import { Name } from "@the-minimal/protocol";
 import { and, email, rangeLength } from "@the-minimal/validator";
 
 export const userRegisterContract = protocolContract({
-    type: "mutation",
-    path: "/user/register",
-    input: {
-        name: Name.Object,
-        value: [
-            { 
-							key: "email", 
-							name: Name.String, 
-							assert: and([rangeLength(5, 50), email])
-						},
-            { 
-							key: "password", 
-							name: Name.String, 
-							assert: rangeLength(8, 16)
-						}
-        ]
-    },
-    output: {
-        name: Name.Object,
-        value: [
-            { 
-							key: "id", 
-							name: Name.String 
-						}
-        ]
-    }
+	type: X.Mutation,
+	path: "/user/register",
+	input: {
+		name: Name.Object,
+		value: [
+			{
+				key: "email",
+				name: Name.String,
+				assert: and([rangeLength(5, 50), email]),
+			},
+			{
+				key: "password",
+				name: Name.String,
+				assert: rangeLength(8, 16),
+			},
+		],
+	},
+	output: {
+		name: Name.Object,
+		value: [
+			{
+				key: "id",
+				name: Name.String,
+			},
+		],
+	},
 });
 ```
 
@@ -59,31 +59,24 @@ import { userRegisterContract } from "@contracts";
 import { User } from "@controllers";
 
 const userRegisterProcedure = protocolProcedure(
-    userRegisterContract,
-    async (value) => {
-        if(await User.exists(value.email)) {
-          throw new Error("User already exists");
-        }
-
-        const user = await User.create(value);
-
-        return {
-            id: user.id
-        }; 
-    }
+	userRegisterContract,
+	async (value) => {
+		console.log({ value });
+		return {
+			id: "test",
+		};
+	},
 );
 
 init();
 
-registerProcedures([
-    userRegisterProcedure
-]);
+registerProcedures([userRegisterProcedure]);
 
 serve({
-  fetch(req) {
-    return callProcedure(req);
-  },
-  port: 3000
+	fetch(req) {
+		return callProcedure(req);
+	},
+	port: 3000,
 });
 ```
 
@@ -108,7 +101,7 @@ const userRegister = protocolClient(
 
 ### Component
 
-```sveltehtml
+```svelte
 <script lang="ts">
   import { protocolClient } from "@the-minimal/rpc"; 
   import { userRegister } from "@api"; 
