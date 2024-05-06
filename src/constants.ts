@@ -1,4 +1,4 @@
-import { type Procedure, Protocol } from "./types";
+import { type Procedure, Protocol } from "./types.js";
 
 export const PROCEDURE_MAP = new Map<string, Procedure.Any>();
 

@@ -1,4 +1,4 @@
-export * from "./types";
-export { protocolContract } from "./contract";
-export { protocolProcedure } from "./procedure";
-export { protocolClient } from "./client";
+export * from "./types.js";
+export { protocolContract } from "./contract.js";
+export { protocolProcedure } from "./procedure.js";
+export { protocolClient } from "./client.js";

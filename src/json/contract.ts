@@ -1,5 +1,5 @@
-import { type Contract, type Procedure, Protocol } from "../types";
-import type { JsonContract } from "./types";
+import { type Contract, type Procedure, Protocol } from "../types.js";
+import type { JsonContract } from "./types.js";
 
 export const jsonContract = <
 	const $Type extends Procedure.Type,

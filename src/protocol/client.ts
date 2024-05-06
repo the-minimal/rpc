@@ -1,5 +1,5 @@
-import { client } from "../client";
-import type { Protocol } from "../types";
+import { client } from "../client.js";
+import type { Protocol } from "../types.js";
 
 export const protocolClient = client<Protocol.Binary>(
 	"application/octet-stream",

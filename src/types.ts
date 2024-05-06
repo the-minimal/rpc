@@ -14,7 +14,7 @@ export namespace Procedure {
 		handler: OuterHandler<ProtocolRawMap[$Protocol]>;
 	};
 
-	export type Any = New<Type, Protocol, unknown, unknown>;
+	export type Any = New<any, any, any, any>;
 
 	export type InnerHandler<$Input, $Output> = (
 		value: $Input,

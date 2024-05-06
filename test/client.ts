@@ -1,6 +1,6 @@
 import { init } from "@the-minimal/protocol";
-import { protocolClient } from "../src";
-import { userRegisterContract } from "./contract";
+import { protocolClient } from "../src/index.js";
+import { userRegisterContract } from "./contract.js";
 
 init();
 

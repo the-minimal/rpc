@@ -1,5 +1,5 @@
 import type { Type } from "@the-minimal/protocol";
-import type { Procedure } from "../types";
+import type { Procedure } from "../types.js";
 
 export type ProtocolContract<
 	$Type extends Procedure.Type,

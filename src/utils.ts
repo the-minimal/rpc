@@ -1,4 +1,4 @@
-import type { Procedure } from "./types";
+import type { Procedure } from "./types.js";
 
 export const getProcedureTypeFromMethod = (method: string) =>
 	+(method.charCodeAt(0) === 71) as Procedure.Type;

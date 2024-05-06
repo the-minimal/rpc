@@ -1,5 +1,10 @@
-import { DEFAULT_CODE, DEFAULT_ERROR } from "./constants";
-import { type Contract, Procedure, type Protocol, type Result } from "./types";
+import { DEFAULT_CODE, DEFAULT_ERROR } from "./constants.js";
+import {
+	type Contract,
+	Procedure,
+	type Protocol,
+	type Result,
+} from "./types.js";
 
 export const client =
 	<$Protocol extends Protocol>(
@@ -45,7 +50,7 @@ export const client =
 					error: response.statusText,
 				};
 			}
-		} catch (e) {
+		} catch (e: any) {
 			return {
 				code: DEFAULT_CODE,
 				data: null,

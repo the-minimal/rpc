@@ -1,4 +1,4 @@
-import type { Contract, Procedure, Protocol } from "./types";
+import type { Contract, Procedure, Protocol } from "./types.js";
 
 export const procedure = (
 	contract: Contract<Procedure.Type, Protocol, unknown, unknown, unknown>,

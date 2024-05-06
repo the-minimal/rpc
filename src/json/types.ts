@@ -1,5 +1,5 @@
 import type { Assertion } from "@the-minimal/types";
-import type { Procedure } from "../types";
+import type { Procedure } from "../types.js";
 
 export type JsonContract<$Type extends Procedure.Type, $Input, $Output> = {
 	type: $Type;

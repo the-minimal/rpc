@@ -1,4 +1,23 @@
-Minimal RPC library in TypeScript.
+![RPC image](https://github.com/the-minimal/rpc/blob/main/docs/the-minimal-rpc.jpg?raw=true)
+
+# Highlights
+
+- Small (~1.2 KB)
+- Low runtime overhead
+- Contract-based
+- Easily extendable
+
+# Protocols
+
+| Name                                                             | Format        | Contract           | Procedure           | Client           |
+|:-----------------------------------------------------------------|:--------------|:-------------------|:--------------------|:-----------------|
+| [@the-minimal/protocol](https://github.com/the-minimal/protocol) | `ArrayBuffer` | `protocolContract` | `protocolProcedure` | `protocolClient` |
+| JSON                                                             | `string`      | `jsonContract`     | `jsonProcedure`     | `jsonClient`     |
+
+We recommend using `@the-minimal/protocol` for most use cases as this library was made primarily around this protocol.
+
+However, JSON works as well but compared to `@the-minimal/protocol` in theory it doesn't need contracts which have to be
+downloaded and parses on client before they can be used which can be seen as a waste of resources for this use-case.
 
 # Install
 
@@ -11,12 +30,12 @@ yarn add @the-minimal/rpc
 ## Contract
 
 ```ts
-import { protocolContract } from "@the-minimal/rpc";
+import { Procedure, protocolContract } from "@the-minimal/rpc";
 import { Name } from "@the-minimal/protocol";
 import { and, email, rangeLength } from "@the-minimal/validator";
 
 export const userRegisterContract = protocolContract({
-	type: X.Mutation,
+	type: Procedure.Type.Mutation,
 	path: "/user/register",
 	input: {
 		name: Name.Object,
@@ -49,28 +68,22 @@ export const userRegisterContract = protocolContract({
 
 ```ts
 import { serve } from "bun";
-import { 
-  callProcedure, 
-  protocolProcedure, 
-  registerProcedures 
-} from "@the-minimal/rpc";
 import { init } from "@the-minimal/protocol";
+import { protocolProcedure, universalMapRouter } from "@the-minimal/rpc";
 import { userRegisterContract } from "@contracts";
-import { User } from "@controllers";
 
 const userRegisterProcedure = protocolProcedure(
 	userRegisterContract,
-	async (value) => {
-		console.log({ value });
+	async () => {
 		return {
 			id: "test",
 		};
 	},
 );
 
-init();
+const callProcedure = universalMapRouter([userRegisterProcedure]);
 
-registerProcedures([userRegisterProcedure]);
+init();
 
 serve({
 	fetch(req) {
@@ -91,11 +104,9 @@ import { userRegisterContract } from "@contracts";
 
 init();
 
-const API_URL = import.meta.env.API_URL;
-
 const userRegister = protocolClient(
-  API_URL, 
-  userRegisterContract
+	import.meta.env.RPC_URL,
+	userRegisterContract,
 );
 ```
 
@@ -103,7 +114,7 @@ const userRegister = protocolClient(
 
 ```svelte
 <script lang="ts">
-  import { protocolClient } from "@the-minimal/rpc"; 
+  import { goto } from "svelte";
   import { userRegister } from "@api"; 
   import { Error } from "./Error"; 
 
@@ -113,10 +124,12 @@ const userRegister = protocolClient(
   
   const register = async () => {
     try {
-      const result = await userRegister({ 
+      await userRegister({ 
         email, 
         password 
       });
+      
+      goto("/login");
     } catch (e) {
       error = e.message;
     } 

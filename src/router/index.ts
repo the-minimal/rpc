@@ -1,1 +1,1 @@
-export { universalArrayRouter, universalMapRouter } from "./universal";
+export { universalArrayRouter, universalMapRouter } from "./universal.js";

@@ -5,31 +5,41 @@ import {
 	PROCEDURE_NOT_FOUND_ERROR,
 	PROTOCOL_CONTENT_TYPE_MAP,
 	PROTOCOL_METHOD_MAP,
-} from "../constants";
-import { registerProcedures } from "../register";
-import type { Procedure } from "../types";
+} from "../constants.js";
+import { registerProcedures } from "../register.js";
+import type { Procedure } from "../types.js";
 import {
 	findProcedure,
 	getProcedureMapKey,
 	getProcedureTypeFromMethod,
-} from "../utils";
+} from "../utils.js";
 
-const universalHandler = async (procedure: Procedure.Any, request: Request) => {
+const universalHandler = async (
+	procedure: Procedure.Any | undefined,
+	request: Request,
+) => {
 	if (procedure) {
 		try {
 			const result = await procedure.handler(
-				await request[PROTOCOL_METHOD_MAP[procedure.contract.protocol]](),
+				await request[
+					PROTOCOL_METHOD_MAP[
+						procedure.contract.protocol as keyof typeof PROTOCOL_METHOD_MAP
+					]
+				](),
 			);
 
 			return new Response(result as any, {
 				headers: {
 					...procedure.contract.headers,
 					"content-type":
-						PROTOCOL_CONTENT_TYPE_MAP[procedure.contract.protocol],
+						PROTOCOL_CONTENT_TYPE_MAP[
+							procedure.contract
+								.protocol as keyof typeof PROTOCOL_CONTENT_TYPE_MAP
+						],
 				},
 				status: 200,
 			});
-		} catch (e) {
+		} catch (e: any) {
 			const message = e?.message ?? DEFAULT_ERROR;
 
 			return new Response(message, {

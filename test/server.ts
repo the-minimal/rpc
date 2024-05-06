@@ -1,7 +1,7 @@
 import { init } from "@the-minimal/protocol";
 import { serve } from "bun";
-import { protocolProcedure, universalMapRouter } from "../src";
-import { userRegisterContract } from "./contract";
+import { protocolProcedure, universalMapRouter } from "../src/index.js";
+import { userRegisterContract } from "./contract.js";
 
 const userRegisterProcedure = protocolProcedure(
 	userRegisterContract,

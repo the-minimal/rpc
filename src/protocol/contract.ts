@@ -1,8 +1,8 @@
 import type { Infer, Type } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Contract, Procedure } from "../types";
-import { Protocol } from "../types";
-import type { ProtocolContract } from "./types";
+import type { Contract, Procedure } from "../types.js";
+import { Protocol } from "../types.js";
+import type { ProtocolContract } from "./types.js";
 
 export const protocolContract = <
 	const $Type extends Procedure.Type,
