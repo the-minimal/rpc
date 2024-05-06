@@ -12,13 +12,3 @@ export type ProtocolContract<
 	input: $Input;
 	output: $Output;
 };
-
-export type Result<$Value> = {
-	code: number;
-	data: $Value;
-	error: null;
-} | {
-	code: number;
-	data: null;
-	error: string;
-};

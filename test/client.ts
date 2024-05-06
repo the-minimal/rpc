@@ -4,7 +4,10 @@ import { userRegisterContract } from "./contract";
 
 init();
 
-const userRegister = protocolClient("localhost:3000", userRegisterContract);
+const userRegister = protocolClient(
+	"http://localhost:3000",
+	userRegisterContract,
+);
 
 (async () => {
 	const result = await userRegister({

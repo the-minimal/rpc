@@ -1,6 +1,7 @@
 import type { Infer, Type } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
 import type { Contract, Procedure } from "../types";
+import { Protocol } from "../types";
 import type { ProtocolContract } from "./types";
 
 export const protocolContract = <
@@ -9,8 +10,9 @@ export const protocolContract = <
 	const $Output extends Type.Any,
 >(
 	contract: ProtocolContract<$Type, $Input, $Output>,
-): Contract<$Type, Infer<$Input>, Infer<$Output>, ArrayBuffer> => ({
+): Contract<$Type, Protocol.Binary, Infer<$Input>, Infer<$Output>> => ({
 	type: contract.type,
+	protocol: Protocol.Binary,
 	path: contract.path,
 	headers: contract.headers ?? {},
 	input: {

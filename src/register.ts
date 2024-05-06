@@ -1,5 +1,5 @@
-import type { Procedure } from "./types";
 import { PROCEDURE_MAP } from "./constants";
+import type { Procedure } from "./types";
 
 export const registerProcedures = (procedures: Procedure.Any[]) => {
 	for (let i = 0; i < procedures.length; ++i) {
