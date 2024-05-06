@@ -53,17 +53,23 @@
     "test:client": "bun test/client.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.4",
+    "@biomejs/biome": "1.7.0",
+    "@fast-check/vitest": "0.1.0",
     "@types/bun": "latest",
+    "@vitest/coverage-v8": "1.5.0",
     "release-it": "17.2.0",
-    "tsup": "8.0.2"
+    "tsup": "8.0.2",
+    "typedoc": "0.25.13",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "1.5.0"
   },
   "peerDependencies": {
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@the-minimal/protocol": "0.1.0",
+    "@the-minimal/error": "0.1.1",
+    "@the-minimal/protocol": "0.1.1",
     "@the-minimal/types": "0.4.0",
-    "@the-minimal/validator": "0.3.0"
+    "@the-minimal/validator": "0.3.2"
   }
 }

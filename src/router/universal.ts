@@ -3,10 +3,8 @@ import {
 	DEFAULT_ERROR,
 	PROCEDURE_MAP,
 	PROCEDURE_NOT_FOUND_ERROR,
-	PROTOCOL_CONTENT_TYPE_MAP,
-	PROTOCOL_METHOD_MAP,
 } from "@constants";
-import type { Procedure } from "@types";
+import type { AnyProcedure } from "@types";
 import {
 	findProcedure,
 	getProcedureMapKey,
@@ -15,27 +13,18 @@ import {
 } from "@utils";
 
 const universalHandler = async (
-	procedure: Procedure.Any | undefined,
+	procedure: AnyProcedure | undefined,
 	request: Request,
 ) => {
 	if (procedure) {
 		try {
-			const result = await procedure.handler(
-				await request[
-					PROTOCOL_METHOD_MAP[
-						procedure.contract.protocol as keyof typeof PROTOCOL_METHOD_MAP
-					]
-				](),
-			);
+			const result = await procedure.handler(await request.arrayBuffer());
 
-			return new Response(result as any, {
+			return new Response(result, {
 				headers: {
 					...procedure.contract.headers,
-					"content-type":
-						PROTOCOL_CONTENT_TYPE_MAP[
-							procedure.contract
-								.protocol as keyof typeof PROTOCOL_CONTENT_TYPE_MAP
-						],
+					"Content-Type": "application/octet-stream",
+					"Content-Length": `${result.byteLength}`,
 				},
 				status: 200,
 			});
@@ -53,7 +42,7 @@ const universalHandler = async (
 	});
 };
 
-export const universalMapRouter = (procedures: Procedure.Any[]) => {
+export const universalMapRouter = (procedures: AnyProcedure[]) => {
 	registerProcedure(procedures);
 
 	return (request: Request) => {
@@ -66,7 +55,7 @@ export const universalMapRouter = (procedures: Procedure.Any[]) => {
 	};
 };
 
-export const universalArrayRouter = (procedures: Procedure.Any[]) => {
+export const universalArrayRouter = (procedures: AnyProcedure[]) => {
 	return (request: Request) => {
 		return universalHandler(
 			findProcedure(

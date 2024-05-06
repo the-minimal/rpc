@@ -1,9 +1,9 @@
 import { Name } from "@the-minimal/protocol";
 import { and, email, rangeLength } from "@the-minimal/validator";
-import { Procedure, protocolContract } from "../src/index.js";
+import { Type, contract } from "../src/index.js";
 
-export const userRegisterContract = protocolContract({
-	type: Procedure.Type.Mutation,
+export const userRegisterContract = contract({
+	type: Type.Mutation,
 	path: "/user/register",
 	input: {
 		name: Name.Object,

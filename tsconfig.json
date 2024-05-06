@@ -12,7 +12,7 @@
     "baseUrl": "./src",
     "paths": {
       "@utils": [
-        "utils/index.ts"
+        "utils.ts"
       ],
       "@constants": [
         "constants.ts"

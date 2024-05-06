@@ -1,13 +1,13 @@
 import { PROCEDURE_MAP } from "@constants";
-import type { Procedure } from "@types";
+import type { AnyProcedure, Type } from "@types";
 
 export const getProcedureTypeFromMethod = (method: string) =>
-	+(method.charCodeAt(0) === 71) as Procedure.Type;
+	+(method.charCodeAt(0) === 71) as Type;
 
 export const getProcedureMapKey = (method: string, pathname: string) =>
 	`${getProcedureTypeFromMethod(method)}:${pathname}`;
 
-export const registerProcedure = (procedures: Procedure.Any[]) => {
+export const registerProcedure = (procedures: AnyProcedure[]) => {
 	for (let i = 0; i < procedures.length; ++i) {
 		PROCEDURE_MAP.set(
 			`${procedures[i].contract.type}:${procedures[i].contract.path}`,
@@ -17,9 +17,9 @@ export const registerProcedure = (procedures: Procedure.Any[]) => {
 };
 
 export const findProcedure = (
-	type: Procedure.Type,
+	type: Type,
 	pathname: string,
-	procedures: Procedure.Any[],
+	procedures: AnyProcedure[],
 ) => {
 	for (let i = 0; i < procedures.length; ++i) {
 		if (

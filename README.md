@@ -2,22 +2,27 @@
 
 # Highlights
 
-- Small (~1.2 KB)
+- Small (< 1 KB)
 - Low runtime overhead
 - Contract-based
-- Easily extendable
-
-# Protocols
-
-| Name                                                             | Format        | Contract           | Procedure           | Client           |
-|:-----------------------------------------------------------------|:--------------|:-------------------|:--------------------|:-----------------|
-| [@the-minimal/protocol](https://github.com/the-minimal/protocol) | `ArrayBuffer` | `protocolContract` | `protocolProcedure` | `protocolClient` |
-| JSON                                                             | `string`      | `jsonContract`     | `jsonProcedure`     | `jsonClient`     |
-
-We recommend using `@the-minimal/protocol` for most use cases as this library was made primarily around this protocol.
-
-However, JSON works as well but compared to `@the-minimal/protocol` in theory it doesn't need contracts which have to be
-downloaded and parses on client before they can be used which can be seen as a waste of resources for this use-case.
+- Static type inference
+- Protocol: [@the-minimal/protocol](https://github.com/the-minimal/protocol)
+  - Binary protocol
+  - Schema-based
+  - Single pass encode + assert
+  - Produces very small payload
+  - Small (< 1 KB)
+  - Low runtime overhead
+- Validation: [@the-minimal/validator](https://github.com/the-minimal/validator)
+  - Runtime validations
+  - Assertion-only
+  - Small (< 1 KB)
+  - Low runtime overhead
+- Errors: [@the-minimal/error](https://github.com/the-minimal/error)
+  - Minimal errors
+  - No stack traces
+  - Small (~ 120 bytes)
+  - Low runtime overhead
 
 # Install
 
@@ -30,12 +35,12 @@ yarn add @the-minimal/rpc
 ## Contract
 
 ```ts
-import { Procedure, protocolContract } from "@the-minimal/rpc";
+import { Type, contract } from "@the-minimal/rpc";
 import { Name } from "@the-minimal/protocol";
 import { and, email, rangeLength } from "@the-minimal/validator";
 
-export const userRegisterContract = protocolContract({
-  type: Procedure.Type.Mutation,
+export const userRegisterContract = contract({
+  type: Type.Mutation,
   path: "/user/register",
   input: {
     name: Name.Object,
@@ -69,10 +74,10 @@ export const userRegisterContract = protocolContract({
 ```ts
 import { serve } from "bun";
 import { init } from "@the-minimal/protocol";
-import { protocolProcedure, universalMapRouter } from "@the-minimal/rpc";
+import { procedure, universalMapRouter } from "@the-minimal/rpc";
 import { userRegisterContract } from "@contracts";
 
-const userRegisterProcedure = protocolProcedure(
+const userRegisterProcedure = procedure(
   userRegisterContract,
   async () => {
     return {
@@ -99,12 +104,12 @@ serve({
 
 ```ts
 import { init } from "@the-minimal/protocol";
-import { protocolClient } from "@the-minimal/rpc";
+import { client } from "@the-minimal/rpc";
 import { userRegisterContract } from "@contracts";
 
 init();
 
-const userRegister = protocolClient(
+const userRegister = client(
   import.meta.env.RPC_URL,
   userRegisterContract,
 );

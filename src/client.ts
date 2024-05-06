@@ -1,33 +1,34 @@
 import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
-import { type Contract, Procedure, type Protocol, type Result } from "@types";
+import {
+	type AnyType,
+	type Infer,
+	decode,
+	encode,
+} from "@the-minimal/protocol";
+import { type Contract, type Result, Type } from "@types";
 
 export const client =
-	<$Protocol extends Protocol>(
-		contentType: string,
-		method: "json" | "arrayBuffer" | "text" | "blob",
-	) =>
-	<$Type extends Procedure.Type, $Input, $Output>(
+	<$Type extends Type, $Input extends AnyType, $Output extends AnyType>(
 		baseUrl: string,
-		contract: Contract<$Type, $Protocol, $Input, $Output>,
+		contract: Contract<$Type, $Input, $Output>,
 	) =>
-	async (value: $Input): Promise<Result<$Output>> => {
+	async (value: Infer<$Input>): Promise<Result<Infer<$Output>>> => {
 		try {
+			const body = encode(contract.input, value);
 			const response = await fetch(`${baseUrl}${contract.path}`, {
-				method: contract.type === Procedure.Type.Query ? "GET" : "POST",
+				method: contract.type === Type.Query ? "GET" : "POST",
 				headers: {
 					...contract.headers,
-					"content-type": contentType,
+					"Content-Type": "application/octet-stream",
+					"Content-Length": `${body.byteLength}`,
 				},
-				body: contract.input.encode(value) as any,
+				body,
 			});
 
 			if (response.ok && response.status >= 200 && response.status <= 299) {
-				const raw = await response[method]();
-				const decoded = contract.output.decode(raw);
-
 				return {
 					code: response.status,
-					data: decoded,
+					data: decode(contract.output, await response.arrayBuffer()),
 					error: null,
 				};
 			}
@@ -49,7 +50,7 @@ export const client =
 			return {
 				code: DEFAULT_CODE,
 				data: null,
-				error: e?.message || DEFAULT_ERROR,
+				error: e?.message ?? DEFAULT_ERROR,
 			};
 		}
 	};

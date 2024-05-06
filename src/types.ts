@@ -1,58 +1,39 @@
-export namespace Procedure {
-	export enum Type {
-		Mutation,
-		Query,
-	}
+import type { AnyType, Infer } from "@the-minimal/protocol";
 
-	export type New<
-		$Type extends Type,
-		$Protocol extends Protocol,
-		$Input,
-		$Output,
-	> = {
-		contract: Contract<$Type, $Protocol, $Input, $Output>;
-		handler: OuterHandler<ProtocolRawMap[$Protocol]>;
-	};
-
-	export type Any = New<any, any, any, any>;
-
-	export type InnerHandler<$Input, $Output> = (
-		value: $Input,
-	) => Promise<$Output>;
-	export type OuterHandler<$Raw> = (value: $Raw) => Promise<$Raw>;
-
-	export type Headers = Record<string, string>;
+export enum Type {
+	Mutation,
+	Query,
 }
 
-export enum Protocol {
-	Json,
-	Binary,
-}
-
-export type ProtocolRawMap = {
-	[Protocol.Json]: string;
-	[Protocol.Binary]: ArrayBuffer;
+export type Procedure<
+	$Type extends Type,
+	$Input extends AnyType,
+	$Output extends AnyType,
+> = {
+	contract: Contract<$Type, $Input, $Output>;
+	handler: OuterHandler;
 };
 
+export type AnyProcedure = Procedure<any, any, any>;
+
+export type InnerHandler<$Input extends AnyType, $Output extends AnyType> = (
+	value: Infer<$Input>,
+) => Promise<Infer<$Output>>;
+
+export type OuterHandler = (value: ArrayBuffer) => Promise<ArrayBuffer>;
+
+export type Headers = Record<string, string>;
+
 export type Contract<
-	$Type extends Procedure.Type,
-	$Protocol extends Protocol,
-	$Input,
-	$Output,
-	$Raw = ProtocolRawMap[$Protocol],
+	$Type extends Type,
+	$Input extends AnyType,
+	$Output extends AnyType,
 > = {
 	type: $Type;
-	protocol: $Protocol;
 	path: string;
-	headers: Procedure.Headers;
-	input: {
-		encode: (value: $Input) => $Raw;
-		decode: (value: $Raw) => $Input;
-	};
-	output: {
-		encode: (value: $Output) => $Raw;
-		decode: (value: $Raw) => $Output;
-	};
+	headers?: Headers;
+	input: $Input;
+	output: $Output;
 };
 
 export type Result<$Value> =
