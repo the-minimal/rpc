@@ -8,8 +8,20 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@utils": [
+        "utils/index.ts"
+      ],
+      "@constants": [
+        "constants.ts"
+      ],
+      "@types": [
+        "types.ts"
+      ]
+    }
   },
-  "include": ["src", "test"],
+  "include": ["src", "scripts", "tests"],
   "exclude": ["node_modules"]
 }

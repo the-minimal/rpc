@@ -1,10 +1,5 @@
-import { DEFAULT_CODE, DEFAULT_ERROR } from "./constants.js";
-import {
-	type Contract,
-	Procedure,
-	type Protocol,
-	type Result,
-} from "./types.js";
+import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
+import { type Contract, Procedure, type Protocol, type Result } from "@types";
 
 export const client =
 	<$Protocol extends Protocol>(

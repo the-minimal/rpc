@@ -1,5 +1,5 @@
-import { procedure } from "../procedure.js";
-import type { Contract, Procedure, Protocol } from "../types.js";
+import type { Contract, Procedure, Protocol } from "@types";
+import { procedure } from "@utils";
 
 export const protocolProcedure = procedure as <
 	$Type extends Procedure.Type,

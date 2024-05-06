@@ -1,4 +1,4 @@
-import { client } from "../client.js";
-import type { Protocol } from "../types.js";
+import type { Protocol } from "@types";
+import { client } from "@utils";
 
 export const jsonClient = client<Protocol.Json>("application/json", "json");

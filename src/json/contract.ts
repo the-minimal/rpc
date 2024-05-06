@@ -1,4 +1,4 @@
-import { type Contract, type Procedure, Protocol } from "../types.js";
+import { type Contract, type Procedure, Protocol } from "@types";
 import type { JsonContract } from "./types.js";
 
 export const jsonContract = <

@@ -5,14 +5,14 @@ import {
 	PROCEDURE_NOT_FOUND_ERROR,
 	PROTOCOL_CONTENT_TYPE_MAP,
 	PROTOCOL_METHOD_MAP,
-} from "../constants.js";
-import { registerProcedures } from "../register.js";
-import type { Procedure } from "../types.js";
+} from "@constants";
+import type { Procedure } from "@types";
 import {
 	findProcedure,
 	getProcedureMapKey,
 	getProcedureTypeFromMethod,
-} from "../utils.js";
+	registerProcedure,
+} from "@utils";
 
 const universalHandler = async (
 	procedure: Procedure.Any | undefined,
@@ -54,7 +54,7 @@ const universalHandler = async (
 };
 
 export const universalMapRouter = (procedures: Procedure.Any[]) => {
-	registerProcedures(procedures);
+	registerProcedure(procedures);
 
 	return (request: Request) => {
 		return universalHandler(

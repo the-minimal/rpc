@@ -35,32 +35,32 @@ import { Name } from "@the-minimal/protocol";
 import { and, email, rangeLength } from "@the-minimal/validator";
 
 export const userRegisterContract = protocolContract({
-	type: Procedure.Type.Mutation,
-	path: "/user/register",
-	input: {
-		name: Name.Object,
-		value: [
-			{
-				key: "email",
-				name: Name.String,
-				assert: and([rangeLength(5, 50), email]),
-			},
-			{
-				key: "password",
-				name: Name.String,
-				assert: rangeLength(8, 16),
-			},
-		],
-	},
-	output: {
-		name: Name.Object,
-		value: [
-			{
-				key: "id",
-				name: Name.String,
-			},
-		],
-	},
+  type: Procedure.Type.Mutation,
+  path: "/user/register",
+  input: {
+    name: Name.Object,
+    value: [
+      {
+        key: "email",
+        name: Name.String,
+        assert: and([rangeLength(5, 50), email]),
+      },
+      {
+        key: "password",
+        name: Name.String,
+        assert: rangeLength(8, 16),
+      },
+    ],
+  },
+  output: {
+    name: Name.Object,
+    value: [
+      {
+        key: "id",
+        name: Name.String,
+      },
+    ],
+  },
 });
 ```
 
@@ -73,12 +73,12 @@ import { protocolProcedure, universalMapRouter } from "@the-minimal/rpc";
 import { userRegisterContract } from "@contracts";
 
 const userRegisterProcedure = protocolProcedure(
-	userRegisterContract,
-	async () => {
-		return {
-			id: "test",
-		};
-	},
+  userRegisterContract,
+  async () => {
+    return {
+      id: "test",
+    };
+  },
 );
 
 const callProcedure = universalMapRouter([userRegisterProcedure]);
@@ -86,10 +86,10 @@ const callProcedure = universalMapRouter([userRegisterProcedure]);
 init();
 
 serve({
-	fetch(req) {
-		return callProcedure(req);
-	},
-	port: 3000,
+  fetch(req) {
+    return callProcedure(req);
+  },
+  port: 3000,
 });
 ```
 
@@ -105,8 +105,8 @@ import { userRegisterContract } from "@contracts";
 init();
 
 const userRegister = protocolClient(
-	import.meta.env.RPC_URL,
-	userRegisterContract,
+  import.meta.env.RPC_URL,
+  userRegisterContract,
 );
 ```
 
