@@ -7,9 +7,8 @@ export default defineConfig({
         isolate: true,
         coverage: {
             provider: "v8",
-            include: ["tests"],
-            exclude: ["src", "scripts", "dist", "docs", "coverage"],
-            reporter: ["text", "html", "clover", "json", "json-summary"]
+            include: ["src/**/*.ts"],
+            exclude: ["src/index.ts", "src/tests.ts", "scripts", "dist", "docs", "coverage"]
         }
     },
 });

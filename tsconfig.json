@@ -19,6 +19,9 @@
       ],
       "@types": [
         "types.ts"
+      ],
+      "@tests": [
+        "tests.ts"
       ]
     }
   },

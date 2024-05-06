@@ -43,14 +43,14 @@ export const client =
 				return {
 					code: response.status,
 					data: null,
-					error: response.statusText,
+					error: !!response.statusText ? response.statusText : DEFAULT_ERROR,
 				};
 			}
 		} catch (e: any) {
 			return {
 				code: DEFAULT_CODE,
 				data: null,
-				error: e?.message ?? DEFAULT_ERROR,
+				error: !!e?.message ? e.message : DEFAULT_ERROR,
 			};
 		}
 	};
