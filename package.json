@@ -19,10 +19,12 @@
       }
     }
   },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
-    "build/*.js",
-    "build/*.map",
-    "build/*.ts"
+    "dist"
   ],
   "repository": {
     "type": "git",
