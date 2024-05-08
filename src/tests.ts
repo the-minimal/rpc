@@ -1,7 +1,7 @@
 import { Name } from "@the-minimal/protocol";
 import { expect, rangeLength } from "@the-minimal/validator";
 import { procedure } from "./server/procedure/index.js";
-import { contract } from "./shared/contract/index.js";
+import { contract } from "./shared/index.js";
 
 export const userRegisterContract = contract({
 	method: "POST",

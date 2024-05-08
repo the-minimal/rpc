@@ -11,6 +11,7 @@ Experience lightning-fast data transfers and bulletproof validation with this ti
 - Low runtime overhead
 - Contract based
 - Static type inference
+- 100% test coverage
 - Protocol: [@the-minimal/protocol](https://github.com/the-minimal/protocol)
   - Binary protocol
   - Schema-based
