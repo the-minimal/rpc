@@ -7,29 +7,39 @@ import {
 } from "@the-minimal/protocol";
 import type { Contract, Method, Result } from "@types";
 
-export const client =
-	<$Method extends Method, $Input extends AnyType, $Output extends AnyType>(
-		baseUrl: string,
-		contract: Contract<$Method, $Input, $Output>,
-	) =>
-	async (value: Infer<$Input>, hash?: any): Promise<Result<Infer<$Output>>> => {
+export const client = <
+	$Method extends Method,
+	$Input extends AnyType,
+	$Output extends AnyType,
+>(
+	baseUrl: string,
+	contract: Contract<$Method, $Input, $Output>,
+) => {
+	return async (
+		value: Infer<$Input>,
+		hash?: string,
+	): Promise<Result<Infer<$Output>>> => {
 		try {
 			const body = encode(contract.input, value);
-			const hashString = contract.hash
-				? `#${
-						hash ??
-						TEXT_DECODER.decode(await crypto.subtle.digest("SHA-1", body))
-					}`
-				: "";
-			const response = await fetch(`${baseUrl}${contract.path}${hashString}`, {
-				method: contract.method || "GET",
-				headers: {
-					...contract.headers,
-					"Content-Type": "application/octet-stream",
-					"Content-Length": `${body.byteLength}`,
+			const response = await fetch(
+				`${baseUrl}${contract.path}${
+					contract.hash
+						? `#${
+								hash ??
+								TEXT_DECODER.decode(await crypto.subtle.digest("SHA-1", body))
+							}`
+						: ""
+				}`,
+				{
+					method: contract.method ?? "GET",
+					headers: {
+						...contract.headers,
+						"Content-Type": "application/octet-stream",
+						"Content-Length": `${body.byteLength}`,
+					},
+					body,
 				},
-				body,
-			});
+			);
 
 			if (response.ok && response.status >= 200 && response.status <= 299) {
 				return {
@@ -39,19 +49,17 @@ export const client =
 				};
 			}
 
-			try {
-				return {
-					code: response.status,
-					data: null,
-					error: await response.text(),
-				};
-			} catch {
-				return {
-					code: response.status,
-					data: null,
-					error: !!response.statusText ? response.statusText : DEFAULT_ERROR,
-				};
-			}
+			return {
+				code: response.status,
+				data: null,
+				error: await (async () => {
+					try {
+						return await response.text();
+					} catch {
+						return !!response.statusText ? response.statusText : DEFAULT_ERROR;
+					}
+				})(),
+			};
 		} catch (e: any) {
 			return {
 				code: DEFAULT_CODE,
@@ -60,3 +68,4 @@ export const client =
 			};
 		}
 	};
+};
