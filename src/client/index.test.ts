@@ -1,6 +1,6 @@
 import { DEFAULT_ERROR, PROCEDURE_NOT_FOUND_ERROR } from "@constants";
 import { it } from "@fast-check/vitest";
-import { userRegisterContract, userRegisterContractNoAssert } from "@tests";
+import { userRegisterContract } from "@tests";
 import { encode, init } from "@the-minimal/protocol";
 import { beforeEach, describe, expect, vi } from "vitest";
 import { client } from "./index.js";
@@ -75,7 +75,7 @@ describe("client", () => {
 			text: async () => PROCEDURE_NOT_FOUND_ERROR,
 		});
 
-		const userRegister = client(baseUrl, customUserRegisterContract);
+		const userRegister = client(baseUrl, customUserRegisterContract as any);
 
 		const data = await userRegister(input);
 

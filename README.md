@@ -8,6 +8,7 @@ Minimal and highly opinionated TypeScript RPC library with binary protocol and d
 - Low runtime overhead
 - Contract-based
 - Static type inference
+- Hash-based cache
 - Protocol: [@the-minimal/protocol](https://github.com/the-minimal/protocol)
   - Binary protocol
   - Schema-based
@@ -43,7 +44,7 @@ yarn add @the-minimal/rpc
   import { and, email, rangeLength } from "@the-minimal/validator";
 
   export const userRegisterContract = contract({
-    type: Type.Mutation,
+    method: "POST",
     path: "/user/register",
     input: {
       name: Name.Object,
@@ -181,7 +182,7 @@ Contracts are passed into `procedure` and `client`.
 
 ```ts
 export const userRegisterContract = contract({
-  type: Type.Mutation,
+  type: "POST",
   path: "/user/register",
   input: {
     name: Name.Object,

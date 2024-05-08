@@ -8,7 +8,6 @@ import type { AnyProcedure } from "@types";
 import {
 	findProcedure,
 	getProcedureMapKey,
-	getProcedureTypeFromMethod,
 	registerProcedure,
 } from "../utils/index.js";
 
@@ -17,12 +16,17 @@ const universalHandler = async (
 	request: Request,
 ) => {
 	if (procedure) {
+		const url = new URL(request.url);
+
 		try {
-			const result = await procedure.handler(await request.arrayBuffer());
+			const result = await procedure.handler(
+				await request.arrayBuffer(),
+				url.hash,
+			);
 
 			return new Response(result, {
 				headers: {
-					...procedure.contract.headers,
+					...(procedure.contract.headers || {}),
 					"Content-Type": "application/octet-stream",
 					"Content-Length": `${result.byteLength}`,
 				},
@@ -58,11 +62,7 @@ export const universalMapRouter = (procedures: AnyProcedure[]) => {
 export const universalArrayRouter = (procedures: AnyProcedure[]) => {
 	return (request: Request) => {
 		return universalHandler(
-			findProcedure(
-				getProcedureTypeFromMethod(request.method),
-				new URL(request.url).pathname,
-				procedures,
-			),
+			findProcedure(request.method, new URL(request.url).pathname, procedures),
 			request,
 		);
 	};
