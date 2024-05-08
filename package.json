@@ -1,7 +1,7 @@
 {
   "name": "@the-minimal/rpc",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "author": "Miroslav Vršecký <yamiteru@icloud.com>",
   "description": "Experience lightning-fast data transfers and bulletproof validation with this tiny TypeScript RPC library, harnessing ones-and-zeroes for streamlined and secure back-to-back development",
