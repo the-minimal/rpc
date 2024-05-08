@@ -111,6 +111,7 @@ describe("client", () => {
 		global.fetch = vi.fn().mockReturnValue({
 			ok: false,
 			status: 500,
+			text: async () => "",
 		});
 
 		const userRegister = client(baseUrl, userRegisterContract);

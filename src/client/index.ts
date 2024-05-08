@@ -55,6 +55,7 @@ export const client = <
 				data: null,
 				error: await response
 					.text()
+					.then((v) => v || response.statusText || DEFAULT_ERROR)
 					.catch(() => response.statusText || DEFAULT_ERROR),
 			};
 		} catch (e: any) {
