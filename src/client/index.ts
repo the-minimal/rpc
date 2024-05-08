@@ -11,8 +11,9 @@ export const client = <
 	$Method extends Method,
 	$Input extends AnyType,
 	$Output extends AnyType,
+	$BaseUrl extends string,
 >(
-	baseUrl: string,
+	baseUrl: $BaseUrl extends `${string}/` ? never : $BaseUrl,
 	contract: Contract<$Method, $Input, $Output>,
 ) => {
 	return async (
@@ -41,7 +42,7 @@ export const client = <
 				},
 			);
 
-			if (response.ok && response.status >= 200 && response.status <= 299) {
+			if (response.ok) {
 				return {
 					code: response.status,
 					data: decode(contract.output, await response.arrayBuffer()),
@@ -52,19 +53,15 @@ export const client = <
 			return {
 				code: response.status,
 				data: null,
-				error: await (async () => {
-					try {
-						return await response.text();
-					} catch {
-						return !!response.statusText ? response.statusText : DEFAULT_ERROR;
-					}
-				})(),
+				error: await response
+					.text()
+					.catch(() => response.statusText || DEFAULT_ERROR),
 			};
 		} catch (e: any) {
 			return {
 				code: DEFAULT_CODE,
 				data: null,
-				error: !!e?.message ? e.message : DEFAULT_ERROR,
+				error: e.message || DEFAULT_ERROR,
 			};
 		}
 	};

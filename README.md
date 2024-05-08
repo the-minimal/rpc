@@ -4,7 +4,10 @@ Experience lightning-fast data transfers and bulletproof validation with this ti
 
 # Highlights
 
-- Small bundle (< 1 KB)
+- Small bundle
+  - Client ~ 550 bytes
+  - Server ~ 575 bytes
+  - Shared ~ 100 bytes
 - Low runtime overhead
 - Contract based
 - Static type inference
@@ -38,7 +41,8 @@ yarn add @the-minimal/rpc
   <summary><b>Contract</b></summary>
 
   ```ts
-  import { Type, contract } from "@the-minimal/rpc";
+  import { Type } from "@the-minimal/rpc";
+  import { contract } from "@the-minimal/rpc/shared";
   import { Name } from "@the-minimal/protocol";
   import { and, email, rangeLength } from "@the-minimal/validator";
 
@@ -78,8 +82,8 @@ yarn add @the-minimal/rpc
 
   ```ts
   import { serve } from "bun";
+  import { procedure, universalMapRouter } from "@the-minimal/rpc/server";
   import { init } from "@the-minimal/protocol";
-  import { procedure, universalMapRouter } from "@the-minimal/rpc";
   import { userRegisterContract } from "@contracts";
 
   const userRegisterProcedure = procedure(
@@ -111,8 +115,8 @@ yarn add @the-minimal/rpc
   <summary><b>Client - API</b></summary>
 
   ```ts
+  import { client } from "@the-minimal/client";
   import { init } from "@the-minimal/protocol";
-  import { client } from "@the-minimal/rpc";
   import { userRegisterContract } from "@contracts";
 
   init();

@@ -16,12 +16,10 @@ const universalHandler = async (
 	request: Request,
 ) => {
 	if (procedure) {
-		const url = new URL(request.url);
-
 		try {
 			const result = await procedure.handler(
 				await request.arrayBuffer(),
-				url.hash,
+				new URL(request.url).hash,
 			);
 
 			return new Response(result, {
@@ -33,9 +31,7 @@ const universalHandler = async (
 				status: 200,
 			});
 		} catch (e: any) {
-			const message = !!e?.message ? e.message : DEFAULT_ERROR;
-
-			return new Response(message, {
+			return new Response(e?.message || DEFAULT_ERROR, {
 				status: e?.code ?? DEFAULT_CODE,
 			});
 		}
