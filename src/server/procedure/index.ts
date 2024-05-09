@@ -1,9 +1,9 @@
 import type { AnyType } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Contract, InnerHandler, Method } from "@types";
+import type { Contract, InnerHandler, MethodValue } from "@types";
 
 export const procedure = <
-	$Method extends Method,
+	$Method extends MethodValue,
 	$Input extends AnyType,
 	$Output extends AnyType,
 >(

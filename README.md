@@ -5,8 +5,8 @@ Experience lightning-fast data transfers and bulletproof validation with this ti
 # Highlights
 
 - Small bundle
-  - Client ~ 575 bytes
-  - Server ~ 575 bytes
+  - Client ~ 600 bytes
+  - Server ~ 600 bytes
   - Shared ~ 100 bytes
 - Low runtime overhead
 - Contract based

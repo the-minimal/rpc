@@ -4,7 +4,8 @@ import {
 	PROCEDURE_MAP,
 	PROCEDURE_NOT_FOUND_ERROR,
 } from "@constants";
-import { type AnyProcedure, Method } from "@types";
+import type { AnyProcedure, MethodValue } from "@types";
+import { Method } from "@types";
 import { base64ToBytes } from "../base64ToBytes/index.js";
 import { findProcedure } from "../findProcedure/index.js";
 import { getProcedureMapKey } from "../getProcedureMapKey/index.js";
@@ -53,7 +54,7 @@ export const universalMapRouter = (procedures: AnyProcedure[]) => {
 		return universalHandler(
 			PROCEDURE_MAP.get(
 				getProcedureMapKey(
-					+(request.method === "GET"),
+					+(request.method === "GET") as MethodValue,
 					new URL(request.url).pathname,
 				),
 			),
@@ -66,7 +67,7 @@ export const universalArrayRouter = (procedures: AnyProcedure[]) => {
 	return (request: Request) => {
 		return universalHandler(
 			findProcedure(
-				+(request.method === "GET"),
+				+(request.method === "GET") as MethodValue,
 				new URL(request.url).pathname,
 				procedures,
 			),

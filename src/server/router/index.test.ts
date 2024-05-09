@@ -1,8 +1,4 @@
-import {
-	DEFAULT_ERROR,
-	PROCEDURE_MAP,
-	PROCEDURE_NOT_FOUND_ERROR,
-} from "@constants";
+import { PROCEDURE_MAP, PROCEDURE_NOT_FOUND_ERROR } from "@constants";
 import { fc, it } from "@fast-check/vitest";
 import {
 	userRegisterContract,

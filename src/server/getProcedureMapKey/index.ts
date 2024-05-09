@@ -1,4 +1,4 @@
-import type { Method } from "@types";
+import type { MethodValue } from "@types";
 
-export const getProcedureMapKey = (method: Method, pathname: string) =>
-	`${method}:${pathname}` as `${Method}:${string}`;
+export const getProcedureMapKey = (method: MethodValue, pathname: string) =>
+	`${method}:${pathname}` as `${MethodValue}:${string}`;

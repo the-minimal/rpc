@@ -1,11 +1,12 @@
 import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
 import type { AnyType, Infer } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import { type Contract, Method, type Result } from "@types";
+import type { Contract, MethodValue, Result } from "@types";
+import { Method } from "@types";
 import { bytesToBase64 } from "../bytesToBase64/index.js";
 
 export const httpClient = <
-	$Method extends Method,
+	$Method extends MethodValue,
 	$Input extends AnyType,
 	$Output extends AnyType,
 	$BaseUrl extends string,

@@ -1,8 +1,8 @@
 import type { AnyType } from "@the-minimal/protocol";
-import type { Contract, Method } from "@types";
+import type { Contract, MethodValue } from "@types";
 
 export const contract = <
-	const $Method extends Method,
+	const $Method extends MethodValue,
 	const $Input extends AnyType,
 	const $Output extends AnyType,
 >(

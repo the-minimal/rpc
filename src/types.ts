@@ -1,12 +1,15 @@
 import type { AnyType, Infer } from "@the-minimal/protocol";
 
-export enum Method {
-	Post,
-	Get,
-}
+export const Method = {
+	Post: 0,
+	Get: 1,
+} as const;
+
+export type MethodValue = (typeof Method)[keyof typeof Method];
+export type Method = typeof Method;
 
 export type Procedure<
-	$Method extends Method,
+	$Method extends MethodValue,
 	$Input extends AnyType,
 	$Output extends AnyType,
 > = {
@@ -29,7 +32,7 @@ export type Path<$Value extends string> = `/${$Value}`;
 export type AnyPath = Path<string>;
 
 export type Contract<
-	$Method extends Method,
+	$Method extends MethodValue,
 	$Input extends AnyType,
 	$Output extends AnyType,
 > = {
