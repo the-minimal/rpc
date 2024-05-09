@@ -16,10 +16,10 @@ describe("registerProcedure", () => {
 		registerProcedure(procedures);
 
 		expect(PROCEDURE_MAP.size).toBe(2);
-		expect(PROCEDURE_MAP.get(`POST:${userRegisterContract.path}`)).toBe(
+		expect(PROCEDURE_MAP.get(`0:${userRegisterContract.path}`)).toBe(
 			userRegisterProcedure,
 		);
-		expect(PROCEDURE_MAP.get(`POST:${userLoginContract.path}`)).toBe(
+		expect(PROCEDURE_MAP.get(`0:${userLoginContract.path}`)).toBe(
 			userLoginProcedure,
 		);
 	});

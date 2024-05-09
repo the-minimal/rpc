@@ -1,7 +1,7 @@
 import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
 import type { AnyType, Infer } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Contract, Method, Result } from "@types";
+import { type Contract, Method, type Result } from "@types";
 import { bytesToBase64 } from "../bytesToBase64/index.js";
 
 export const httpClient = <
@@ -15,20 +15,10 @@ export const httpClient = <
 ) => {
 	return async (value: Infer<$Input>): Promise<Result<Infer<$Output>>> => {
 		try {
-			(contract as any).method ??= "GET";
-
 			const body = encode(contract.input, value);
 			const response =
-				contract.method === "GET"
-					? await fetch(
-							`${baseUrl}${contract.path}#${await bytesToBase64(
-								new Uint8Array(body),
-							)}`,
-							{
-								headers: contract.headers,
-							},
-						)
-					: await fetch(`${baseUrl}${contract.path}`, {
+				contract.method === Method.Post
+					? await fetch(`${baseUrl}${contract.path}`, {
 							method: "POST",
 							headers: {
 								...contract.headers,
@@ -36,7 +26,15 @@ export const httpClient = <
 								"Content-Length": `${body.byteLength}`,
 							},
 							body,
-						});
+						})
+					: await fetch(
+							`${baseUrl}${contract.path}#${await bytesToBase64(
+								new Uint8Array(body),
+							)}`,
+							{
+								headers: contract.headers,
+							},
+						);
 
 			if (response.ok) {
 				return {

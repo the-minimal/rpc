@@ -1,7 +1,7 @@
-import type { AnyProcedure } from "@types";
+import type { AnyProcedure, Method } from "@types";
 
 export const findProcedure = (
-	method: string,
+	method: Method,
 	pathname: string,
 	procedures: AnyProcedure[],
 ) => {

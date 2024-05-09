@@ -42,12 +42,13 @@ yarn add @the-minimal/rpc
   <summary><b>Contract</b></summary>
 
   ```ts
-  import { Type } from "@the-minimal/rpc";
+  import { Type, Method } from "@the-minimal/rpc";
   import { contract } from "@the-minimal/rpc/shared";
   import { Name } from "@the-minimal/protocol";
   import { and, email, rangeLength } from "@the-minimal/validator";
 
   export const userRegisterContract = contract({
+    method: Method.Post,
     path: "/user/register",
     input: {
       name: Name.Object,
@@ -283,15 +284,13 @@ Contract is a declaration of how client and server communicate with each other.
 - `path` = `Request` path
 - `method` = `Request` method
 - `headers` = `Request` headers
-- `hash` = whether to include hash in URL
 - `input`/`output` = [@the-minimal/protocol](https://github.com/the-minimal/protocol) schemas
 
 Contracts are passed into `procedure` and `client`.
 
 ```ts
 export const userRegisterContract = contract({
-  method: "POST",
-  hash: false,
+  method: Method.Post,
   headers: {},
   path: "/user/register",
   input: {

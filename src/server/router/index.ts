@@ -4,7 +4,7 @@ import {
 	PROCEDURE_MAP,
 	PROCEDURE_NOT_FOUND_ERROR,
 } from "@constants";
-import type { AnyProcedure } from "@types";
+import { type AnyProcedure, Method } from "@types";
 import { base64ToBytes } from "../base64ToBytes/index.js";
 import { findProcedure } from "../findProcedure/index.js";
 import { getProcedureMapKey } from "../getProcedureMapKey/index.js";
@@ -17,13 +17,13 @@ const universalHandler = async (
 	if (procedure) {
 		try {
 			const result = await procedure.handler(
-				request.method === "GET"
-					? ((
+				procedure.contract.method === Method.Post
+					? await request.arrayBuffer()
+					: ((
 							await base64ToBytes(
 								request.url.slice(request.url.indexOf("#") + 1),
 							)
-						).buffer as ArrayBuffer)
-					: await request.arrayBuffer(),
+						).buffer as ArrayBuffer),
 			);
 
 			return new Response(result, {
@@ -52,7 +52,10 @@ export const universalMapRouter = (procedures: AnyProcedure[]) => {
 	return (request: Request) => {
 		return universalHandler(
 			PROCEDURE_MAP.get(
-				getProcedureMapKey(request.method, new URL(request.url).pathname),
+				getProcedureMapKey(
+					+(request.method === "GET"),
+					new URL(request.url).pathname,
+				),
 			),
 			request,
 		);
@@ -62,7 +65,11 @@ export const universalMapRouter = (procedures: AnyProcedure[]) => {
 export const universalArrayRouter = (procedures: AnyProcedure[]) => {
 	return (request: Request) => {
 		return universalHandler(
-			findProcedure(request.method, new URL(request.url).pathname, procedures),
+			findProcedure(
+				+(request.method === "GET"),
+				new URL(request.url).pathname,
+				procedures,
+			),
 			request,
 		);
 	};

@@ -1,10 +1,11 @@
 import { Name } from "@the-minimal/protocol";
 import { expect, rangeLength } from "@the-minimal/validator";
-import { procedure } from "./server/procedure/index.js";
+import { Method } from "@types";
+import { procedure } from "./server/index.js";
 import { contract } from "./shared/index.js";
 
 export const userRegisterContract = contract({
-	method: "POST",
+	method: Method.Post,
 	path: "/user/register",
 	input: {
 		name: Name.Object,
@@ -28,7 +29,7 @@ export const userRegisterContract = contract({
 });
 
 export const userRegisterContractNoAssert = contract({
-	method: "POST",
+	method: Method.Post,
 	path: "/user/register",
 	input: {
 		name: Name.Object,
@@ -53,7 +54,7 @@ export const userRegisterProcedure = procedure(
 );
 
 export const userLoginContract = contract({
-	method: "POST",
+	method: Method.Post,
 	path: "/user/login",
 	input: {
 		name: Name.Object,

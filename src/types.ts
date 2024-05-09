@@ -1,6 +1,9 @@
 import type { AnyType, Infer } from "@the-minimal/protocol";
 
-export type Method = "GET" | "POST";
+export enum Method {
+	Post,
+	Get,
+}
 
 export type Procedure<
 	$Method extends Method,
