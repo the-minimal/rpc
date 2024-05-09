@@ -5,7 +5,7 @@ Experience lightning-fast data transfers and bulletproof validation with this ti
 # Highlights
 
 - Small bundle
-  - Client ~ 550 bytes
+  - Client ~ 575 bytes
   - Server ~ 575 bytes
   - Shared ~ 100 bytes
 - Low runtime overhead
@@ -116,13 +116,13 @@ yarn add @the-minimal/rpc
   <summary><b>Client - API</b></summary>
 
   ```ts
-  import { client } from "@the-minimal/client";
+  import { httpClient } from "@the-minimal/client";
   import { init } from "@the-minimal/protocol";
   import { userRegisterContract } from "@contracts";
 
   init();
 
-  const userRegister = client(
+  const userRegister = httpClient(
     import.meta.env.RPC_URL,
     userRegisterContract,
   );
@@ -350,7 +350,7 @@ It accepts a base url and a contract and returns a function that accepts a value
 with `Result`.
 
 ```ts
-const userRegister = client(
+const userRegister = httpClient(
   import.meta.env.RPC_URL,
   userRegisterContract,
 );

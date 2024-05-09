@@ -3,7 +3,7 @@ import { it } from "@fast-check/vitest";
 import { userRegisterContract } from "@tests";
 import { encode, init } from "@the-minimal/protocol";
 import { beforeEach, describe, expect, vi } from "vitest";
-import { client } from "./index.js";
+import { httpClient } from "./index.js";
 
 describe("client", () => {
 	beforeEach(() => {
@@ -31,7 +31,7 @@ describe("client", () => {
 			arrayBuffer: async () => encode(userRegisterContract.output, output),
 		});
 
-		const userRegister = client(baseUrl, userRegisterContract);
+		const userRegister = httpClient(baseUrl, userRegisterContract);
 
 		const data = await userRegister(input);
 
@@ -75,7 +75,7 @@ describe("client", () => {
 			text: async () => PROCEDURE_NOT_FOUND_ERROR,
 		});
 
-		const userRegister = client(baseUrl, customUserRegisterContract as any);
+		const userRegister = httpClient(baseUrl, customUserRegisterContract as any);
 
 		const data = await userRegister(input);
 
@@ -114,7 +114,7 @@ describe("client", () => {
 			text: async () => "",
 		});
 
-		const userRegister = client(baseUrl, userRegisterContract);
+		const userRegister = httpClient(baseUrl, userRegisterContract);
 
 		const data = await userRegister(input);
 
@@ -154,7 +154,7 @@ describe("client", () => {
 			arrayBuffer: async () => encode(userRegisterContract.output, output),
 		});
 
-		const userRegister = client(baseUrl, userRegisterContract);
+		const userRegister = httpClient(baseUrl, userRegisterContract);
 
 		const data = await userRegister(input);
 

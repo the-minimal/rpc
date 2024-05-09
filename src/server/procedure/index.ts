@@ -1,4 +1,5 @@
-import { type AnyType, decode, encode } from "@the-minimal/protocol";
+import type { AnyType } from "@the-minimal/protocol";
+import { decode, encode } from "@the-minimal/protocol";
 import type { Contract, InnerHandler, Method } from "@types";
 
 export const procedure = <

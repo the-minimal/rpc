@@ -1,6 +1,6 @@
 import type { AnyType, Infer } from "@the-minimal/protocol";
 
-export type Method = "GET" | "POST" | "PUT" | "DELETE";
+export type Method = "GET" | "POST";
 
 export type Procedure<
 	$Method extends Method,
@@ -17,10 +17,7 @@ export type InnerHandler<$Input extends AnyType, $Output extends AnyType> = (
 	value: Infer<$Input>,
 ) => Promise<Infer<$Output>>;
 
-export type OuterHandler = (
-	value: ArrayBuffer,
-	hash: string,
-) => Promise<ArrayBuffer>;
+export type OuterHandler = (value: ArrayBuffer) => Promise<ArrayBuffer>;
 
 export type Headers = Record<string, string>;
 
@@ -35,7 +32,6 @@ export type Contract<
 > = {
 	method?: $Method;
 	headers?: Headers;
-	hash?: boolean;
 	path: AnyPath;
 	input: $Input;
 	output: $Output;

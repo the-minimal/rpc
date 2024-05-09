@@ -5,11 +5,10 @@ import {
 	PROCEDURE_NOT_FOUND_ERROR,
 } from "@constants";
 import type { AnyProcedure } from "@types";
-import {
-	findProcedure,
-	getProcedureMapKey,
-	registerProcedure,
-} from "../utils/index.js";
+import { base64ToBytes } from "../base64ToBytes/index.js";
+import { findProcedure } from "../findProcedure/index.js";
+import { getProcedureMapKey } from "../getProcedureMapKey/index.js";
+import { registerProcedure } from "../registerProcedure/index.js";
 
 const universalHandler = async (
 	procedure: AnyProcedure | undefined,
@@ -18,8 +17,13 @@ const universalHandler = async (
 	if (procedure) {
 		try {
 			const result = await procedure.handler(
-				await request.arrayBuffer(),
-				new URL(request.url).hash,
+				request.method === "GET"
+					? ((
+							await base64ToBytes(
+								request.url.slice(request.url.indexOf("#") + 1),
+							)
+						).buffer as ArrayBuffer)
+					: await request.arrayBuffer(),
 			);
 
 			return new Response(result, {
