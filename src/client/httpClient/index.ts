@@ -1,37 +1,46 @@
 import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
-import type { AnyType, Infer } from "@the-minimal/protocol";
+import type { AnyType } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Contract, MethodValue, Result } from "@types";
+import type { Optional } from "@the-minimal/types";
+import type { ContractOutput, InferType, MethodValue, Result } from "@types";
 import { Method } from "@types";
 import { bytesToBase64 } from "../bytesToBase64/index.js";
 
 export const httpClient = <
 	$Method extends MethodValue,
-	$Input extends AnyType,
-	$Output extends AnyType,
+	$Input extends Optional<AnyType>,
+	$Output extends Optional<AnyType>,
 	$BaseUrl extends string,
 >(
 	baseUrl: $BaseUrl extends `${string}/` ? never : $BaseUrl,
-	contract: Contract<$Method, $Input, $Output>,
+	contract: ContractOutput<$Method, $Input, $Output>,
 ) => {
-	return async (value: Infer<$Input>): Promise<Result<Infer<$Output>>> => {
+	return async (
+		value: InferType<$Input>,
+	): Promise<Result<InferType<$Output>>> => {
 		try {
-			const body = encode(contract.input, value);
+			const body = contract.input ? encode(contract.input, value) : undefined;
 			const response =
 				contract.method === Method.Post
 					? await fetch(`${baseUrl}${contract.path}`, {
 							method: "POST",
 							headers: {
 								...contract.headers,
-								"Content-Type": "application/octet-stream",
-								"Content-Length": `${body.byteLength}`,
+								...(contract.input && {
+									"Content-Type": "application/octet-stream",
+									"Content-Length": `${(body as ArrayBuffer).byteLength}`,
+								}),
 							},
 							body,
 						})
 					: await fetch(
-							`${baseUrl}${contract.path}#${await bytesToBase64(
-								new Uint8Array(body),
-							)}`,
+							`${baseUrl}${contract.path}${
+								contract.input
+									? `#${await bytesToBase64(
+											new Uint8Array(body as ArrayBuffer),
+										)}`
+									: ""
+							}`,
 							{
 								headers: contract.headers,
 							},
@@ -40,7 +49,9 @@ export const httpClient = <
 			if (response.ok) {
 				return {
 					code: response.status,
-					data: decode(contract.output, await response.arrayBuffer()),
+					data: contract.output
+						? decode(contract.output, await response.arrayBuffer())
+						: (undefined as any),
 					error: null,
 				};
 			}

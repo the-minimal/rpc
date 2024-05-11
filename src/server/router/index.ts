@@ -18,20 +18,24 @@ const universalHandler = async (
 	if (procedure) {
 		try {
 			const result = await procedure.handler(
-				procedure.contract.method === Method.Post
-					? await request.arrayBuffer()
-					: ((
-							await base64ToBytes(
-								request.url.slice(request.url.indexOf("#") + 1),
-							)
-						).buffer as ArrayBuffer),
+				procedure.contract.input
+					? procedure.contract.method === Method.Post
+						? await request.arrayBuffer()
+						: ((
+								await base64ToBytes(
+									request.url.slice(request.url.indexOf("#") + 1),
+								)
+							).buffer as ArrayBuffer)
+					: undefined,
 			);
 
 			return new Response(result, {
 				headers: {
 					...(procedure.contract.headers || {}),
-					"Content-Type": "application/octet-stream",
-					"Content-Length": `${result.byteLength}`,
+					...(procedure.contract.output && {
+						"Content-Type": "application/octet-stream",
+						"Content-Length": `${(result as ArrayBuffer).byteLength}`,
+					}),
 				},
 				status: 200,
 			});
