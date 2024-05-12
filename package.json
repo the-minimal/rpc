@@ -98,7 +98,7 @@
   },
   "dependencies": {
     "@the-minimal/error": "0.1.1",
-    "@the-minimal/protocol": "0.1.3",
+    "@the-minimal/protocol": "0.2.0",
     "@the-minimal/types": "0.4.0",
     "@the-minimal/validator": "0.3.2"
   }

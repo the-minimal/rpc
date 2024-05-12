@@ -1,12 +1,12 @@
-import type { AnyType } from "@the-minimal/protocol";
+import type { AnyProtocolType } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
 import type { Optional } from "@the-minimal/types";
 import type { ContractOutput, InnerHandler, MethodValue } from "@types";
 
 export const procedure = <
 	$Method extends MethodValue,
-	$Input extends Optional<AnyType>,
-	$Output extends Optional<AnyType>,
+	$Input extends Optional<AnyProtocolType>,
+	$Output extends Optional<AnyProtocolType>,
 >(
 	contract: ContractOutput<$Method, $Input, $Output>,
 	handler: InnerHandler<$Input, $Output>,
@@ -14,7 +14,7 @@ export const procedure = <
 	contract,
 	handler: async (
 		value: $Input extends undefined ? undefined : ArrayBuffer,
-	) => {
+	): Promise<$Output extends undefined ? undefined : ArrayBuffer> => {
 		return contract.output
 			? encode(
 					contract.output,
@@ -24,6 +24,6 @@ export const procedure = <
 							: (undefined as any),
 					),
 				)
-			: undefined;
+			: (undefined as any);
 	},
 });
