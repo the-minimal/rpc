@@ -99,7 +99,7 @@
   "dependencies": {
     "@the-minimal/error": "0.1.1",
     "@the-minimal/protocol": "0.2.0",
-    "@the-minimal/types": "0.4.0",
-    "@the-minimal/validator": "0.3.2"
+    "@the-minimal/types": "0.5.0",
+    "@the-minimal/validator": "0.3.3"
   }
 }

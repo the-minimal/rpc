@@ -1,15 +1,15 @@
 import { DEFAULT_CODE, DEFAULT_ERROR } from "@constants";
 import type { AnyProtocolType } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Optional } from "@the-minimal/types";
+import type { Maybe } from "@the-minimal/types";
 import type { ContractOutput, InferType, MethodValue, Result } from "@types";
 import { Method } from "@types";
 import { bytesToBase64 } from "../bytesToBase64/index.js";
 
 export const httpClient = <
 	$Method extends MethodValue,
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 	$BaseUrl extends string,
 >(
 	baseUrl: $BaseUrl extends `${string}/` ? never : $BaseUrl,

@@ -1,12 +1,12 @@
 import type { AnyProtocolType } from "@the-minimal/protocol";
 import { decode, encode } from "@the-minimal/protocol";
-import type { Optional } from "@the-minimal/types";
+import type { Maybe } from "@the-minimal/types";
 import type { ContractOutput, InnerHandler, MethodValue } from "@types";
 
 export const procedure = <
 	$Method extends MethodValue,
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 >(
 	contract: ContractOutput<$Method, $Input, $Output>,
 	handler: InnerHandler<$Input, $Output>,

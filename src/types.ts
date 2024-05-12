@@ -1,5 +1,5 @@
 import type { AnyProtocolType, Infer } from "@the-minimal/protocol";
-import type { Optional } from "@the-minimal/types";
+import type { Maybe } from "@the-minimal/types";
 
 export const Method = {
 	Post: 0,
@@ -11,8 +11,8 @@ export type Method = typeof Method;
 
 export type Procedure<
 	$Method extends MethodValue,
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 > = {
 	contract: ContractInput<$Method, $Input, $Output>;
 	handler: OuterHandler<$Input, $Output>;
@@ -21,15 +21,15 @@ export type Procedure<
 export type AnyProcedure = Procedure<any, any, any>;
 
 export type InnerHandler<
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 > = (
 	value: $Input extends undefined ? undefined : Infer<$Input>,
 ) => Promise<$Output extends undefined ? undefined : Infer<$Output>>;
 
 export type OuterHandler<
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 > = (
 	value: $Input extends undefined ? undefined : ArrayBuffer,
 ) => Promise<$Output extends undefined ? undefined : ArrayBuffer>;
@@ -42,8 +42,8 @@ export type AnyPath = Path<string>;
 
 export type ContractInput<
 	$Method extends MethodValue,
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 > = {
 	path: AnyPath;
 	method?: $Method;
@@ -54,8 +54,8 @@ export type ContractInput<
 
 export type ContractOutput<
 	$Method extends MethodValue,
-	$Input extends Optional<AnyProtocolType>,
-	$Output extends Optional<AnyProtocolType>,
+	$Input extends Maybe<AnyProtocolType>,
+	$Output extends Maybe<AnyProtocolType>,
 > = {
 	path: AnyPath;
 	method: $Method;
@@ -76,5 +76,5 @@ export type Result<$Value> =
 			error: string;
 	  };
 
-export type InferType<$Type extends Optional<AnyProtocolType>> =
+export type InferType<$Type extends Maybe<AnyProtocolType>> =
 	$Type extends undefined ? undefined : Infer<$Type>;
